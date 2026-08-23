@@ -1,0 +1,13 @@
+<script>
+  $('body').on('click','.lk_sorevn_del',function(data){
+    $.post('/local/templates/lk/ajax/sorevn_del.php',{'sid':$(this).attr('data-id')},function(data){
+      if(data=='')$('.popup.popup-sent').addClass('popup_open');
+      else{        
+        $('.sent_error>div').html(data);
+        $('.sent_error').fadeIn(300,function(){
+          setTimeout(function(){$('.sent_error').fadeOut(300);},3000);
+        });
+      }
+    })
+  });
+</script>

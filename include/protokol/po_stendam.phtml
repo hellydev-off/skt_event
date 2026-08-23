@@ -1,0 +1,149 @@
+<table id="protocol_result_table" class="table_reg">
+<tbody>
+  <tr>
+    <th rowspan="2">Спортсмен</th>
+    <th rowspan="2">Смена / Стенд</th>
+    <th colspan="<?=$seriy?>">Зачетные серии (<?=$seriy?> серии по <?=$broskov?> броска)</th>
+    <th rowspan="2">Баллы</th>
+    <th rowspan="2">Место</th>
+    <th rowspan="2">Выполн. разряд</th>
+  </tr>
+  <tr>
+  <?for($is=1;$is<=$seriy;$is++){?>
+    <th class="no_sticky"><?=$is?></th>
+  <?}?>
+  </tr>
+  <?
+  $iSmena=1;
+  $iStend=0;
+  $aMestoFromPrg=Aiplk::getMestoFromProgramma($aProgramma);
+  $aItems=Aiplk::getSportsmeny($aSorevn['ID']);
+  Aiplk::sortSprts($aItems, $aProgramma['PROPERTIES']['DISCIPLINA']['VALUE']);
+  //var_dump('<pre>',$aMestoFromPrg,'</pre>');
+  foreach($aItems as $k=>$aUserSportsmen){
+    if(!isset($aMestoFromPrg[$aUserSportsmen['ID']])){
+      unset($aItems[$k]);
+      continue;
+    }
+    $_aMesto=$aMestoFromPrg[$aUserSportsmen['ID']];
+    $smenaStend=Aiplk::protokolGetStendSmena($kolvo_stendov, $_aMesto[2], $aProgramma['PROPERTIES']['KOLVO_STENDOV']['VALUE'], $aProgramma['PROPERTIES']['SO_STENDA']['VALUE'], $aProgramma['PROPERTIES']['S_SERII']['VALUE']);
+    $aItems[$k]['smena']=$smenaStend['smena'];
+    $aItems[$k]['stend']=$smenaStend['stend'];
+    $aItems[$k]['mesto']=$aMestoFromPrg[$aUserSportsmen['ID']][0];
+  }
+  //v($aItems);
+  if(isset($_REQUEST['sort_mesta']) and $_REQUEST['sort_mesta']=='Y'){
+    //sort по местам
+    usort($aItems, function($a, $b){
+      if($a['mesto']==$b['mesto'])return 0;
+      return $a['mesto']<$b['mesto']?-1:1;
+    });
+  }else{
+    //sort по сменам, стендам
+    usort($aItems, function($a, $b){
+      if($a['stend']==$b['stend'])return 0;
+      return $a['stend'] < $b['stend']?-1:1;
+    });
+    usort($aItems, function($a, $b){
+      if($a['smena']==$b['smena'])return 0;
+      return $a['smena'] < $b['smena']?-1:1;
+    });  
+    //
+  }
+  foreach($aItems as $aUserSportsmen){
+    if(!isset($aMestoFromPrg[$aUserSportsmen['ID']])){
+      //var_dump('<pre>',$aUserSportsmen,'</pre>');
+      continue;
+    }
+    $_aMesto=$aMestoFromPrg[$aUserSportsmen['ID']];
+    if($aUserSportsmen['PROPERTIES']['VOZRAST_GRUPPA']['VALUE']!=$aProgramma['PROPERTIES']['VOZRAST_GRUPPA']['VALUE'])continue;
+    if(!in_array($aProgramma['PROPERTIES']['DISCIPLINA']['VALUE'], $aUserSportsmen['PROPERTIES']['DISCIPLINY']['VALUE']))continue;
+    $rsUser=CUser::GetByID($aUserSportsmen['PROPERTIES']['SPORTSMEN']['VALUE']);
+    $aUser=$rsUser->Fetch();
+    $iStend++;
+    if($iStend>$aProgramma['PROPERTIES']['KOLVO_STENDOV']['VALUE']){
+      $iSmena++;$iStend=1;
+    }
+    //var_dump('<pre>',$_aMesto,'<pre>');
+  ?>
+  <tr class="cur_mesto_<?=$aMestoFromPrg[$aUserSportsmen['ID']][0]?>">
+  	<?
+  	$smenaStend=Aiplk::protokolGetStendSmena($kolvo_stendov, $_aMesto[2], $aProgramma['PROPERTIES']['KOLVO_STENDOV']['VALUE'], $aProgramma['PROPERTIES']['SO_STENDA']['VALUE'], $aProgramma['PROPERTIES']['S_SERII']['VALUE']);
+  	?>
+    
+    <td>
+      <div><?=$aUser['LAST_NAME']?> <?=$aUser['NAME']?> <?=$aUser['SECOND_NAME']?></div>
+      <div class="prot_tbl_small"><?=Aiplk::getRegionTitle($aUserSportsmen)['txt']?></div>
+      <?if(Aiplk::getStartPage()!='sport'){?>
+        <div class="prot_tbl_small"><?=ConvertDateTime($aUser['PERSONAL_BIRTHDAY'], "DD.MM.YYYY", "ru")?> 
+      <?}?>
+        <?/*=$aUserSportsmen['ID']?><br>
+        <?=$aMestoFromPrg[$aUserSportsmen['ID']][3]*/?>
+      </div>
+    </td>
+    <td><?=$smenaStend['smena']?>/<?=$smenaStend['stend']?></td>
+    <?
+    $aAllResult=Aiplk::getSportsmenResults($aUserSportsmen['ID']);
+    for($is=1;$is<=$seriy;$is++){?>
+      <td>
+        <?//var_dump('<pre>',$aUserSportsmen['ID'],'</pre>');?>
+        <?
+          $ares=$aAllResult;
+          if(isset($ares[$aProgramma['ID']][$is])>0){
+            $txtres='<div class="prot_result">'.
+            '<div class="gray">'.array_sum($ares[$aProgramma['ID']][$is]).'</div>'.
+            implode('<br>',$ares[$aProgramma['ID']][$is]).
+            '</div>';
+          }elseif($ed){
+            $txtres='<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>';
+          }else{
+            $txtres=' - ';
+          }
+        ?>
+        <?if($ed){?>
+        <a
+          class="prot_add_item"
+          data-id_prog="<?=$aProgramma['ID']?>"
+          data-username="<?=$aUser['LAST_NAME']?> <?=$aUser['NAME']?> <?=$aUser['SECOND_NAME']?>"
+          data-userid="<?=$aUserSportsmen['ID']?>"
+          data-seriya="<?=$is?>"
+          data-smena="<?=$smenaStend['smena']?>"
+          data-stend="<?=$smenaStend['stend']?>"
+          data-region="<?=Aiplk::getRegionTitle($aUserSportsmen)['txt']?>"
+          data-results='<?=json_encode($ares[$aProgramma['ID']][$is], JSON_UNESCAPED_UNICODE)?>'
+          href="#">
+            <?=$txtres?>
+        </a>
+        <?}else{?>
+          <span><?=$txtres?></span>
+        <?}?>
+      </td>
+    <?}?>
+    <td>
+      <?
+      //$allBally=0;
+      $allBroskov=0;
+      //var_dump('<pre>',$aAllResult[$aProgramma['ID']],$is,'</pre>');
+      // foreach($aAllResult[$aProgramma['ID']] as $row){
+      //   $allBally+=array_sum($row);
+      //   $allBroskov+=count($row);
+      // }
+      //echo $allBally;//.'/'.$allBroskov;
+      echo $aMestoFromPrg[$aUserSportsmen['ID']][1];
+      ?>
+    </td>
+    <td>
+      <?
+        if(empty($aMestoFromPrg[$aUserSportsmen['ID']][1]))echo '-';
+        else echo $aMestoFromPrg[$aUserSportsmen['ID']][0];
+      ?>
+    </td>
+    <td>
+      <?//var_dump('<pre>',$aMestoFromPrg[$aUserSportsmen['ID']][1])?>
+      <?=$newRazr=$aRazryadId[Aiplk::getRazryadRes($aDisc[$aProgramma['PROPERTIES']['DISCIPLINA']['VALUE']]['ID'], $aUser['PERSONAL_GENDER'], $aMestoFromPrg[$aUserSportsmen['ID']][1])['UF_RAZR']]['NAME']?>
+    </td>
+  </tr>
+  <?}?>
+</tbody>  
+</table>

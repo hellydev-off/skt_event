@@ -1,0 +1,25 @@
+# Bitrix cache/tmp — регенерируются автоматически
+/bitrix/cache/
+/bitrix/managed_cache/
+/bitrix/stack_cache/
+/bitrix/html_pages/
+/bitrix/updates/
+
+# Бэкапы — тяжёлые, не нужны в истории git
+/bitrix/backup/
+
+# Пользовательские загрузки — большие бинарные файлы, лучше синхронизировать отдельно (rsync/S3), не через git
+/upload/
+
+# Конфиг с реальными паролями от БД — не должен попадать в git
+/bitrix/.settings.php
+
+# Логи
+*.log
+/logs/
+
+# Системное
+.DS_Store
+tmp/
+bin-tmp/
+/.backup.info

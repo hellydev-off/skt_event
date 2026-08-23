@@ -1,0 +1,32 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"Проекты", 
+		"/lk/projects/", 
+		Array(), 
+		Array("icon"=>"bx-grid-alt"), 
+		"" 
+	),
+	Array(
+		"Бонусы",
+		"/lk/bonus/", 
+		Array(), 
+		Array("icon"=>"bx-receipt"), 
+		"" 
+	),
+	Array(
+		"Профиль", 
+		"/lk/profile/", 
+		Array(), 
+		Array("icon"=>"bx-user"), 
+		"" 
+	),
+	Array(
+		"Информация", 
+		"/lk/info/", 
+		Array(), 
+		Array("icon"=>"bx-info-circle"), 
+		"" 
+	)
+);
+?>

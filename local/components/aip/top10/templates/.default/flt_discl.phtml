@@ -1,0 +1,17 @@
+            <ul id="top10_flt_discipl" class="main-filter-item-wrap">
+              <?$flFirst=false;foreach($aDisc as $k=>$v){?>
+                <?if(!empty($pDisc)){?>
+                  <li data-id="<?=$v['XML_ID']?>" class="main-filter-item-option <?=(($pDisc==$v['XML_ID'])?'active':'')?>"><?=$v['NAME']?></li>
+                <?}else{?>
+                  <li data-id="<?=$v['XML_ID']?>" class="main-filter-item-option <?=((!$flFirst)?'active':'')?>"><?=$v['NAME']?></li>
+                <?}?>  
+              <?$flFirst=true;}?>
+              <?/*
+							<li data-id="d4m" class="main-filter-item-option active">4 м </li>
+							<li data-id="d5m" class="main-filter-item-option">5 м </li>
+							<li data-id="d6m" class="main-filter-item-option">6 м </li>
+							<li data-id="d7m" class="main-filter-item-option">7 м </li>
+							<li data-id="d8m" class="main-filter-item-option">8 м </li>
+							<li data-id="d9m" class="main-filter-item-option">9 м </li>
+              */?>
+						</ul>

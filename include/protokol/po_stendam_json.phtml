@@ -1,0 +1,58 @@
+<?php
+  $aMestoFromPrg=Aiplk::getMestoFromProgramma($aProgramma);
+  $aItems=Aiplk::getSportsmeny($aSorevn['ID']);
+  Aiplk::sortSprts($aItems, $aProgramma['PROPERTIES']['DISCIPLINA']['VALUE']);
+
+  //sort по сменам, стендам
+  foreach($aItems as $k=>$aUserSportsmen){
+    $_aMesto=$aMestoFromPrg[$aUserSportsmen['ID']];
+    $smenaStend=Aiplk::protokolGetStendSmena($kolvo_stendov, $_aMesto[2], $aProgramma['PROPERTIES']['KOLVO_STENDOV']['VALUE']);
+    $aItems[$k]['smena']=$smenaStend['smena'];
+    $aItems[$k]['stend']=$smenaStend['stend'];
+  }
+  usort($aItems, function($a, $b){
+    if($a['stend']==$b['stend'])return 0;
+    return $a['stend'] < $b['stend']?-1:1;
+  });
+  usort($aItems, function($a, $b){
+    if($a['smena']==$b['smena'])return 0;
+    return $a['smena'] < $b['smena']?-1:1;
+  });  
+  //
+
+foreach($aItems as $kUser=>$aUserSportsmen){
+  if(!isset($aMestoFromPrg[$aUserSportsmen['ID']]))continue;
+  $_aMesto=$aMestoFromPrg[$aUserSportsmen['ID']];
+  if($aUserSportsmen['PROPERTIES']['VOZRAST_GRUPPA']['VALUE']!=$aProgramma['PROPERTIES']['VOZRAST_GRUPPA']['VALUE'])continue;
+  if(!in_array($aProgramma['PROPERTIES']['DISCIPLINA']['VALUE'], $aUserSportsmen['PROPERTIES']['DISCIPLINY']['VALUE']))continue;
+  $rsUser=CUser::GetByID($aUserSportsmen['PROPERTIES']['SPORTSMEN']['VALUE']);
+  $aUser=$rsUser->Fetch();
+  $sprtPref='user_'.$kUser;
+
+  $ret[$sprtPref]=array();
+  $ret[$sprtPref]['name']=$aUser['LAST_NAME'].' '.$aUser['NAME'].' '.$aUser['SECOND_NAME'];
+  $ret[$sprtPref]['mesto']=$aMestoFromPrg[$aUserSportsmen['ID']][0];
+
+  $ret2[$sprtPref]=array();
+  $ret2[$sprtPref]['name']=$aUser['LAST_NAME'].' '.$aUser['NAME'].' '.$aUser['SECOND_NAME'];
+  $ret2[$sprtPref]['mesto']=$aMestoFromPrg[$aUserSportsmen['ID']][0];
+
+  $smenaStend=Aiplk::protokolGetStendSmena($kolvo_stendov, $_aMesto[2], $aProgramma['PROPERTIES']['KOLVO_STENDOV']['VALUE']);
+  $aAllResult=Aiplk::getSportsmenResults($aUserSportsmen['ID']);
+  for($is=1;$is<=$seriy;$is++){
+    $ares=$aAllResult;
+    if(isset($ares[$aProgramma['ID']][$is])>0){
+      $ret[$sprtPref]['bally_'.$is]=implode(', ',$ares[$aProgramma['ID']][$is]);
+      $ret[$sprtPref]['sum_'.$is]=array_sum($ares[$aProgramma['ID']][$is]);
+    }
+  }
+  $ret[$sprtPref]['seriya']=$is;
+  $ret[$sprtPref]['smena']=$smenaStend['smena'];
+  $ret[$sprtPref]['stend']=$smenaStend['stend'];
+  $ret[$sprtPref]['region']=Aiplk::getRegionTitle($aUserSportsmen)['txt'];
+  $ret[$sprtPref]['total']=$aMestoFromPrg[$aUserSportsmen['ID']][1];
+  $ret[$sprtPref]['razryad']=$newRazr=$aRazryadId[Aiplk::getRazryadRes($aDisc[$aProgramma['PROPERTIES']['DISCIPLINA']['VALUE']]['ID'], $aUser['PERSONAL_GENDER'], $aMestoFromPrg[$aUserSportsmen['ID']][1])['UF_RAZR']]['NAME'];
+
+  $ret2[$sprtPref]['region']=Aiplk::getRegionTitle($aUserSportsmen)['txt'];
+  $ret2[$sprtPref]['total']=$aMestoFromPrg[$aUserSportsmen['ID']][1];
+}
