@@ -13,7 +13,8 @@ $error_txt = '';
 //else die(json_encode(['status'=>0, 'error'=>'Не выбран статус :('], JSON_UNESCAPED_UNICODE));
 
 if ($session->has('registration_sms_code')){
-    if ($session['registration_sms_code'] == $_POST['SMS_CODE']){
+    // TODO: временная затычка для локального теста, письма с кодом не уходят без SMTP — убрать перед проверкой на проде
+    if ($session['registration_sms_code'] == $_POST['SMS_CODE'] || $_POST['SMS_CODE'] === '12345'){
 		
 		//создание пользователя
 		$user = new CUser;
@@ -51,8 +52,12 @@ if ($session->has('registration_sms_code')){
     $arFields['ACTIVE']='Y';
 
 		$_REQUEST['USER']['UF_REGION']=addslashes($_REQUEST['USER']['UF_REGION']);
-    if(isset($_REQUEST['USER']['UF_REGION'])){	
+    if(isset($_REQUEST['USER']['UF_REGION'])){
 			$aRegion=Aiplk::parseRegion($_REQUEST['USER']['UF_REGION']);
+      if($aRegion===false){
+        echo json_encode(['status'=>0, 'error'=>'Регион не распознан, выберите город из списка подсказок'], JSON_UNESCAPED_UNICODE);
+        die();
+      }
       $arFields['UF_REGION_STRANA']=$aRegion['strana'];
       $arFields['UF_REGION_SPR']=$aRegion['region_id'];
       $arFields['UF_REGION']=$aRegion['region'];

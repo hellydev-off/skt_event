@@ -6,6 +6,11 @@ $APPLICATION->SetPageProperty("NOT_SHOW_NAV_CHAIN", "Y");
 $APPLICATION->SetTitle("Главная страница");
 $APPLICATION->AddChainItem('Личный кабинет');
 ?><div class="item-list">
+  <?if(Aiplk::getStartPage()=='nobody'){?>
+    <div class="alert alert-info">
+      Для того, чтобы продолжить работу с порталом, вам необходимо перейти в <a href="/profile/">настройки</a> и активировать необходимый функционал, выбрав роли, кем вы являетесь: спортсмен, судья и (или) тренер.
+    </div>
+  <?}?>
 	<h1 class="block-title">Мероприятия
     <?//echo Aiplk::getStartPage(), ' ', ((CSite::InGroup(array(1)))?'admin':'')?>
     <span> 
@@ -59,9 +64,9 @@ $APPLICATION->AddChainItem('Личный кабинет');
               <a data-id="<?=$aItem['ID']?>" class="btn btn-primary btn-sm lk_sorevn_reg" href="#">Регистрация</a> 
             <?}?>
             <a data-id="<?=$aItem['ID']?>" class="btn btn-primary btn-sm lk_sorevn_protokoly" href="#">Протоколы</a> 
-            <?if(Aiplk::getStartPage()!='sud'){?>
-              <a data-id="<?=$aItem['ID']?>" class="lk_otchety btn btn-primary btn-sm" href="#">Отчеты</a> 
-            <?}?>  
+            <?if(Aiplk::getStartPage()!='sud' or Aiplk::isGlavSud($aItem['ID'])){?>
+              <a data-id="<?=$aItem['ID']?>" class="lk_otchety btn btn-primary btn-sm" href="#">Отчеты</a>
+            <?}?>
           </div>	
         
           <?// or (Aiplk::getStartPage()=='sud' and Aiplk::isGlavSud($aItem['ID']))?>

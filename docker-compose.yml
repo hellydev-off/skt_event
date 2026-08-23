@@ -1,0 +1,39 @@
+services:
+
+  web:
+    build:
+      context: ./docker
+    container_name: skt_event_web
+    ports:
+      - "8091:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: skt_event_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_skt_event
+      MYSQL_DATABASE:      u2767212_default
+      MYSQL_USER:          bitrix
+      MYSQL_PASSWORD:      bitrix
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql.conf:/etc/mysql/conf.d/bitrix.cnf:ro
+      - ./u2767212_default.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+    ports:
+      - "3309:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "bitrix", "-pbitrix"]
+      interval: 10s
+      timeout:  5s
+      retries:  12
+    restart: unless-stopped
+
+volumes:
+  mysql_data:   # сохраняется между перезапусками; удалить: docker compose down -v

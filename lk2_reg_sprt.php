@@ -132,7 +132,8 @@ foreach($aDiscSpr as $xml=>$row){
 </div>
 
 <?
-$aPodp=json_decode($aSorevn['PROPERTIES']['PODZASRANTY']['~VALUE'], true);
+$aPodpByRegion=json_decode($aSorevn['PROPERTIES']['PODZASRANTY']['~VALUE'], true);
+$aPodp=(is_array($aPodpByRegion) and !empty($aCurRegion['UF_XML_ID']) and isset($aPodpByRegion[$aCurRegion['UF_XML_ID']]))?$aPodpByRegion[$aCurRegion['UF_XML_ID']]:array();
 if(empty($aPodp)){?>
 <div class="podpisant_cont">
   <div>

@@ -40,8 +40,8 @@ try{
 
   $aProps['ID_SOREVN']=$SOREVN_ID;
   $aRegion=addslashes($_REQUEST['reg']['REGION']);
-  $aRegion=Aiplk::parseRegion($aRegion, 'findName');
-  if(!$aRegion)throw new Exception($aRegion.' Нет такого региона в справочнике :(');
+  $aRegion=Aiplk::parseRegion($aRegion);
+  if(!$aRegion)throw new Exception('Регион не распознан, выберите город из списка подсказок');
   $aProps['REGION_STRANA']=$aRegion['strana'];
   $aProps['REGION']=$aRegion['region'];
   $aProps['REGION_SPR']=$aRegion['region_xml'];

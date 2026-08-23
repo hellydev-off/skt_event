@@ -18,16 +18,24 @@ $aProps=$_POST['PROJECT'];
 $aProps['STATUS']=array('VALUE'=>'process');
 if(isset($_POST['PROJECT']['MESTO'])){
 	$aRegion=Aiplk::parseRegion($_POST['PROJECT']['MESTO']);
-
-  $aProps['REGION_SPR']=$aRegion['region_xml'];
-	$aProps['REGION_STRANA']=$aRegion['strana'];
-	$aProps['REGION']=$aRegion['region'];
-	$aProps['REGION_GOROD']=$aRegion['gorod'];
+	if($aRegion){
+	  $aProps['REGION_SPR']=$aRegion['region_xml'];
+		$aProps['REGION_STRANA']=$aRegion['strana'];
+		$aProps['REGION']=$aRegion['region'];
+		$aProps['REGION_GOROD']=$aRegion['gorod'];
+	}
   unset($aProps['MESTO']);
 }
 if(isset($_POST['PROJECT']['KOMANDA'])){
-	$aRegion=Aiplk::parseRegion($_POST['PROJECT']['MESTO']);
-	$_POST['PROJECT']['KOMANDA']=$aRegion['region_id'];
+	$_komanda=$_POST['PROJECT']['KOMANDA'];
+	if(strpos($_komanda, '_')!==false){
+		//составное значение из автокомплита городов: Страна_ISOкод_Город
+		$aRegion=Aiplk::parseRegion($_komanda);
+		$aProps['KOMANDA']=$aRegion?$aRegion['region_xml']:'';
+	}else{
+		//поле не трогали — уже голый код региона (значение по умолчанию)
+		$aProps['KOMANDA']=$_komanda;
+	}
 }
 
 //WORK_COMPANY

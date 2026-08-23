@@ -51,7 +51,7 @@ if($id_sportsmen){
           $aRegion=Aiplk::getRegionTitle($_r);
         }?>
       <?}?>
-      <select readonly <?=((!$ed)?'disabled':'')?> required class="inp_tags_region form-control form-control-lg" data-f="REGION" name="reg[REGION]">
+      <select <?=((!$ed)?'disabled':'')?> required class="inp_tags_region form-control form-control-lg" data-f="REGION" name="reg[REGION]">
         <option value="<?=$aRegion['val']?>"><?=$aRegion['txt']?></option>
       </select>  
   </div>

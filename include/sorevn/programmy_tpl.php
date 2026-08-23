@@ -31,7 +31,7 @@ if(empty($aItems))$aItems=array([false]);
         </select>
       </div>
       <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-      <div class="w_200">
+      <div class="w_300">
         <span class="line_note">Дисциплина:</span>
         <select onchange="cms_prg_get_kolvo($(this).parents('div.prog_item'))" <?=((!$ed)?'disabled':'')?> required class="inp_tags prog_discipl form-control form-control-lg" data-f="DISCIPLINA" name="SUD[<?=$aItem['ID']?>][DISCIPLINA]">
           <option value="">Дисциплина</option>

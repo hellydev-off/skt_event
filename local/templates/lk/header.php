@@ -340,7 +340,12 @@ if(Aiplk::getStartPage()=='lk_ross'){?>
                   <span>Тренер</span>
                 </a>
               <?}?>
-              <a href="/profile/" class="nav_link  "><i class='bx bx-cog nav_icon'></i><span>Настройки</span></a> 
+              <?if(CSite::InGroup(array(8))){?>
+                <a href="/lk2_strahovka.php" class="nav_link"><i class="bx bx-shield-alt-2 nav_icon"></i>
+                  <span>Страховка</span>
+                </a>
+              <?}?>
+              <a href="/profile/" class="nav_link  "><i class='bx bx-cog nav_icon'></i><span>Настройки</span></a>
 					</div>
           <div class="rekl_block">
 

@@ -13,8 +13,8 @@ try{
   $aUserStatus=array_merge($aUserStatus, $aUserGroups);
 
   if(isset($_REQUEST['user']['UF_REGION'])){
-		$aRegion=Aiplk::parseRegion($_REQUEST['user']['UF_REGION']);		
-    //v($aRegion);die();
+		$aRegion=Aiplk::parseRegion($_REQUEST['user']['UF_REGION']);
+    if($aRegion===false)throw new Exception('Регион не распознан, выберите город из списка подсказок');
 		$_REQUEST['user']['UF_REGION_STRANA']=$aRegion['strana'];
     $_REQUEST['user']['UF_REGION']=$aRegion['region'];
     $_REQUEST['user']['UF_REGION_SPR']=$aRegion['region_id'];

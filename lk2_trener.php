@@ -30,9 +30,12 @@ $aSorevn=Aiplk::getSorevn(false, 'process', true);
         <img src="/local/templates/lk/img/mesto_proved.png"> Место проведения: <span><?=Aiplk::getRegionTitle($aItem)['txt']?></span>
 			</div>
       <div class="merop_btn_cont">
-        <div>  
-          <a data-id="<?=$aItem['ID']?>" class="btn btn-primary btn-sm lk_sorevn_protokoly" href="#">Протоколы</a>   
-        </div>	
+        <div>
+          <a data-id="<?=$aItem['ID']?>" class="btn btn-primary btn-sm lk_sorevn_protokoly" href="#">Протоколы</a>
+          <?if(Aiplk::isGlavSud($aItem['ID'])){?>
+            <a data-id="<?=$aItem['ID']?>" class="lk_otchety btn btn-primary btn-sm" href="#">Отчеты</a>
+          <?}?>
+        </div>
    		</div>
       <div class="sent_error"><div></div></div>
 		</div>
@@ -40,3 +43,4 @@ $aSorevn=Aiplk::getSorevn(false, 'process', true);
   <?}?>
 </div>
 <?$APPLICATION->IncludeFile(SITE_DIR.'/include/sorevn/protokoly.php')?>
+<?$APPLICATION->IncludeFile(SITE_DIR.'/include/sorevn/otchety.php')?>

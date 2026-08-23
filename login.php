@@ -10,7 +10,21 @@ $APPLICATION->SetTitle("Авторизация");
         .empty_field {
             border: 2px solid red;
         }
+        .to_main_page {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000000000;
+            color: #333;
+            font-size: 15px;
+            text-decoration: none;
+        }
+        .to_main_page:hover {
+            text-decoration: underline;
+        }
     </style>
+
+    <a href="/" class="to_main_page">&larr; На главную</a>
 
     <section class="page-login__content">
         <?php //echo '<pre>'; var_dump($APPLICATION->arAuthResult); echo '</pre>'; ?>
@@ -231,6 +245,17 @@ $APPLICATION->SetTitle("Авторизация");
 
 
                     </form>
+
+<!-- Yandex.RTB R-A-15333226-3 -->
+<div id="yandex_rtb_R-A-15333226-3"></div>
+<script>
+    window.yaContextCb.push(() => {
+        Ya.Context.AdvManager.render({
+            "blockId": "R-A-15333226-3",
+            "renderTo": "yandex_rtb_R-A-15333226-3"
+        })
+    })
+</script>
                 </div>
             </div>
         </div>
@@ -562,6 +587,7 @@ $APPLICATION->SetTitle("Авторизация");
 $(document).ready(function(){
   //select2
   $('#patient_registation .inp_tags').select2({
+    'placeholder':'Начните вводить название города...',
     'tags':false,
     'selectOnClose':false,
     'closeOnSelect':true,
