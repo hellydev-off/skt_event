@@ -873,8 +873,8 @@ class Aiplk{
     else $p='4';
     $vozrast=self::getVozrast($_r);
     $vsearch=$vozrast;
-    //если дата рождения еще будет, то +1год (кроме групп муж и жен)
-    if($vozrast<18){
+    //если дата рождения еще будет, то +1год (кроме групп муж и жен, туда можно попасть только по факту 18-летия)
+    if($vozrast<17){
       $startDate=strtotime(ConvertDateTime($_r['PERSONAL_BIRTHDAY'], date('Y')."-MM-DD", "ru"));
       $nowDate=strtotime(date('Y-m-d'));
       if($nowDate<$startDate)$vsearch++;

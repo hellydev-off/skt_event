@@ -79,17 +79,6 @@
           <select class="form-control form-control-lg inp_tags" name="PROJECT[MESTO]" id="MESTO1" required></select>
 				</div>	
 				
-				<?
-				$curUserReg=Aiplk::getCurRegion();
-				//v($curUserReg);
-				?>
-				
-				<div class="wrap-input100 form-outline mb-2 ">
-          <span class="label-input">Команда<span class="req">*</span></span> 
-          <select class="form-control form-control-lg inp_tags" name="PROJECT[KOMANDA]" id="KOMANDA" required>
-						<option value="<?=$curUserReg['UF_XML_ID']?>" selected><?=$curUserReg['NAME']?></option>
-					</select>
-				</div>
 				<div class="wrap-input100 form-outline mb-2 aip_line">
           <span class="label-input no_margin">Даты проведения</span>
           <div>
