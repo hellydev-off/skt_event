@@ -39,8 +39,17 @@ try{
   else $id_sportsmen=false;
 
   $aProps['ID_SOREVN']=$SOREVN_ID;
-  $aRegion=addslashes($_REQUEST['reg']['REGION']);
-  $aRegion=Aiplk::parseRegion($aRegion);
+  $_regionRaw=addslashes($_REQUEST['reg']['REGION']);
+  if(strpos($_regionRaw, '_')===false){
+    //поле не трогали — значение по умолчанию, это уже голый код региона
+    $_reg=Aiplk::getRegionSprNew($_regionRaw);
+    $aRegion=$_reg?array('strana'=>'Россия', 'region'=>$_reg['UF_NAME'], 'region_xml'=>$_reg['UF_XML_ID'], 'region_id'=>$_reg['ID'], 'gorod'=>''):false;
+  }else{
+    //составное значение: либо из автокомплита городов (Страна_ISOкод_Город),
+    //либо дефолт из reg_edit_tpl.php (Страна_ИмяРегиона_Город) — пробуем оба варианта разбора
+    $aRegion=Aiplk::parseRegion($_regionRaw);
+    if(!$aRegion)$aRegion=Aiplk::parseRegion($_regionRaw, 'findName');
+  }
   if(!$aRegion)throw new Exception('Регион не распознан, выберите город из списка подсказок');
   $aProps['REGION_STRANA']=$aRegion['strana'];
   $aProps['REGION']=$aRegion['region'];
