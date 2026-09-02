@@ -17,7 +17,7 @@ $APPLICATION->SetTitle('Страховка');
             new AccidentKnifeThrowing(
                 'eu-accident-knife-throwing',
                     {
-                        token: 'g3NJwswjYt9LG'
+                        token: '35e31f3d-e57a-433b-b588-7ad8bb3d3cd2'
                      }
                 )
          })
