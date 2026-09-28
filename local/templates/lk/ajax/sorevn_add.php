@@ -26,17 +26,7 @@ if(isset($_POST['PROJECT']['MESTO'])){
 	}
   unset($aProps['MESTO']);
 }
-if(isset($_POST['PROJECT']['KOMANDA'])){
-	$_komanda=$_POST['PROJECT']['KOMANDA'];
-	if(strpos($_komanda, '_')!==false){
-		//составное значение из автокомплита городов: Страна_ISOкод_Город
-		$aRegion=Aiplk::parseRegion($_komanda);
-		$aProps['KOMANDA']=$aRegion?$aRegion['region_xml']:'';
-	}else{
-		//поле не трогали — уже голый код региона (значение по умолчанию)
-		$aProps['KOMANDA']=$_komanda;
-	}
-}
+//KOMANDA — свободное название команды, уже лежит в $aProps как есть
 
 //WORK_COMPANY
 if(!empty($aProps['SPORT_ORG'])){

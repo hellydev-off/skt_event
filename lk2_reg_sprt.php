@@ -23,7 +23,7 @@ $APPLICATION->SetTitle('Регистрация на '.$aSorevn['NAME']);
 </div>
 <hr>
 <div class="reg_sprt_top1">
-  <div>Команда:<span><?=Aiplk::getRegionSpr($aSorevn['PROPERTIES']['KOMANDA']['VALUE'])['NAME']?></span></div>
+  <div>Команда:<span><?=$aSorevn['PROPERTIES']['KOMANDA']['VALUE']?></span></div>
   <div>Вид спорта:<span>Спортивное метание ножа</span></div>
   <div>Даты проведения:<span><?=ConvertDateTime($aSorevn['DATE_ACTIVE_FROM'], "DD.MM.YYYY", "ru") ?> - <?= ConvertDateTime($aSorevn['DATE_ACTIVE_TO'], "DD.MM.YYYY", "ru")?></span></div>
   <div>Соревнования:<span><?=Aiplk::getUroven($aSorevn['PROPERTIES']['UROVEN']['VALUE'])['NAME']?></span></div>
