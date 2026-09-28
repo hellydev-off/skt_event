@@ -48,7 +48,7 @@ function CheckUniqueEmail(&$arFields)
 
     if ($resUsers->fetch()) {
         global $APPLICATION;
-        $APPLICATION->ThrowException("Пользователь с таким Email уже зарегистрирован.");
+        $APPLICATION->ThrowException("Пользователь с таким Email уже зарегистрирован. <b>ДЛЯ ДАЛЬНЕЙШЕЙ РАБОТЫ, НЕОБХОДИМО УКАЗАТЬ ДРУГОЙ ПОЧТОВЫЙ АДРЕС, РАНЕЕ НЕИСПОЛЬЗУЕМЫЙ НА САЙТЕ</b>");
         return false; // Отменяем регистрацию/сохранение
     }
 
